@@ -510,7 +510,7 @@ const Book = () => {
             </div>
           </form>
           <div>
-            {filterBook.map((book, i) => (
+            {bookTitle && filterBook.map((book, i) => (
               <div key={i} className="book-card mb-4">
                 <Link to={'/' + book.id}>
                   <p className="book-title m-0">{book.title}</p>
