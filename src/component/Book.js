@@ -456,24 +456,26 @@ const Book = () => {
   const [createAlert, setCreateAlert] = useState(null)
   const [bookTitle, setBookTitle] = useState('')
 
+  const filterBook = books.filter((book) => book.title.toLowerCase().includes(bookTitle))
+  console.log(filterBook)
+
   const handleSearchBook = (event) => {
     event.preventDefault()
 
-    let bookTitle = event.target.value
-
-    if (event.target.value === '') {
-      setCreateAlert(`${bookTitle} not found`)
+    if (!bookTitle) {
+      setCreateAlert(`Book Title Can't be empty`)
       setTimeout(() => {
         setCreateAlert(null)
       }, 5000)
       console.log('submit')
     }
+    setBookTitle('')
   }
 
   const CreateNotification = ({ message }) => {
     if (!message) return null
     return (
-      <div className="success">
+      <div className="alert">
         <p>{message}</p>
       </div>
     )
@@ -481,8 +483,6 @@ const Book = () => {
 
   const handleChange = (event) => {
     setBookTitle(event.target.value)
-    console.log(event.target.value)
-    console.log(bookTitle)
   }
 
   return (
@@ -490,25 +490,34 @@ const Book = () => {
       <div className="d-flex justify-content-center aling-items-center">
         <div>
           <CreateNotification message={createAlert} />
-          <form className="row mt-5" onSubmit={handleSearchBook}>
+          <form className="row my-4" onSubmit={handleSearchBook}>
             <div className="col-4">
               <h5 className="text-center my-1">Search Book</h5>
             </div>
             <div className="col-6 p-0">
               <input
-                value={bookTitle}
                 type="text"
+                value={bookTitle}
                 className="form-control"
-                placeholder="Name"
-                onChange={() => handleChange}
+                placeholder="Title"
+                onChange={handleChange}
               />
             </div>
             <div className="col-2 pl-2">
               <button type="submit" className="btn btn-primary mb-3">
-                Add
+                Search
               </button>
             </div>
           </form>
+          <div>
+            {filterBook.map((book, i) => (
+              <div key={i} className="book-card mb-4">
+                <Link to={'/' + book.id}>
+                  <p className="book-title m-0">{book.title}</p>
+                </Link>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
       <h1 className="mt-4 avail-books">Available Books</h1>
